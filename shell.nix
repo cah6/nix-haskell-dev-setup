@@ -1,0 +1,1 @@
+(import ./release.nix { withHoogle = true; } ).project1.env
