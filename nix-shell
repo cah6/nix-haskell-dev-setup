@@ -1,0 +1,3 @@
+#!/bin/bash
+cabal2nix . > default.nix
+nix-shell "$@"

@@ -21,9 +21,18 @@ let
   });
 
   hoogleAugmentedPackages = import ./toggle-hoogle.nix { withHoogle = withHoogle; input = customHaskellPackages; };
+  # hoogleAugmentedPackages = (if withHoogle
+  #   then  customHaskellPackages.override (old: {
+  #           overrides = bootstrap.pkgs.lib.composeExtensions (old.overrides or (_: _: {})) (self: super: {
+  #             ghc = super.ghc // { withPackages = super.ghc.withHoogle; };
+  #             ghcWithPackages = self.ghc.withPackages;
+  #           });
+  #         })
+  #   else  customHaskellPackages);
   
   finalHaskellPackages = hoogleAugmentedPackages;
 in
   { 
     project1 = finalHaskellPackages.project1;
+    # project1 = pinnedPkgs.callPackage ./default.nix  {};
   }

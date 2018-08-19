@@ -19,7 +19,22 @@ executable nix-haskell-dev-env
   main-is:             Main.hs
   -- other-modules:
   -- other-extensions:
-  build-depends:       base >=4.9
-                     , beam-core
+  build-depends:  base >=4.9
+                -- , beam-core
+                -- , beam-sqlite
+                -- , beam-postgres
+                -- , sqlite-simple
+                , aeson
+                -- , lens
+                , mtl
+                , text
+                , time
+
+  build-tools:    hlint
+                -- , ghc-mod
+                -- , apply-refact
+                -- , haddock
+                -- , brittany
+                -- , HaRe
   hs-source-dirs:      src
   default-language:    Haskell2010
