@@ -3,9 +3,7 @@
 }:
 let
   bootstrap = import <nixpkgs> { };
-
   nixpkgs = builtins.fromJSON (builtins.readFile ./nixpkgs.json);
-
   src = bootstrap.fetchFromGitHub {
     owner = "NixOS";
     repo  = "nixpkgs-channels";
@@ -16,19 +14,14 @@ let
 
   customHaskellPackages = pinnedPkgs.haskellPackages.override (old: {
     overrides = pinnedPkgs.lib.composeExtensions (old.overrides or (_: _: {})) (self: super: {
-      project1 = self.callPackage ./default.nix { }; 
+      project1 = self.callPackage ./default.nix { };
+      # project1 = builtins.deepSeq 
+      #   (pinnedPkgs.runCommand "running-cabal" { buildInputs = [pinnedPkgs.haskellPackages.cabal2nix]; } "cabal2nix . > default.nix") 
+      #   (self.callPackage ./default.nix { }); 
     });
   });
 
   hoogleAugmentedPackages = import ./toggle-hoogle.nix { withHoogle = withHoogle; input = customHaskellPackages; };
-  # hoogleAugmentedPackages = (if withHoogle
-  #   then  customHaskellPackages.override (old: {
-  #           overrides = bootstrap.pkgs.lib.composeExtensions (old.overrides or (_: _: {})) (self: super: {
-  #             ghc = super.ghc // { withPackages = super.ghc.withHoogle; };
-  #             ghcWithPackages = self.ghc.withPackages;
-  #           });
-  #         })
-  #   else  customHaskellPackages);
   
   finalHaskellPackages = hoogleAugmentedPackages;
 in
